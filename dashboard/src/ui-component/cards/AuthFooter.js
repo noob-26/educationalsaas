@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 // material-ui
-import { Link, Typography, Stack } from '@material-ui/core';
+import { Link, Typography, Stack } from "@material-ui/core";
 
 // ===========================|| FOOTER - AUTHENTICATION 2 & 3 ||=========================== //
 
 const AuthFooter = () => (
-    <Stack direction="row" justifyContent="space-between">
-       Proctor
-    </Stack>
+  <Stack direction="row" justifyContent="space-between">
+    Education
+  </Stack>
 );
 
 export default AuthFooter;
