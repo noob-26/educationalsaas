@@ -126,12 +126,17 @@ const FirebaseRegister = ({ ...others }) => {
   const [formData, setFormData] = useState(initialState);
   //   const navigate = useNavigate();
 
+  console.log(formData);
+
   const register = (event) => {
     auth
       .createUserWithEmailAndPassword(formData.email, formData.password)
       .then((result) => {
         var user = result.user;
-        console.log(user);
+        const name = `${formData.fName} ${formData.lName}`;
+        sessionStorage.setItem("userName", name);
+        sessionStorage.setItem("userEmail", user.email);
+        sessionStorage.setItem("userId", user.uid);
         user.updateProfile({
           displayName: `${formData.fName} ${formData.lName}`,
         });

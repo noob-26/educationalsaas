@@ -111,7 +111,9 @@ const FirebaseLogin = (props, { ...others }) => {
       .then(() => {
         auth.onAuthStateChanged(async function (user) {
           if (user) {
-            console.log(user);
+            sessionStorage.setItem("userName", user.displayName);
+            sessionStorage.setItem("userEmail", user.email);
+            sessionStorage.setItem("userId", user.uid);
             // navigate("", { replace: true });
             window.location.href = "/dashboard/default";
           }
