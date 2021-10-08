@@ -287,6 +287,27 @@ const FirebaseLogin = (props, { ...others }) => {
           </Button>
         </AnimateButton>
       </Grid>
+      <Grid item xs={12}>
+        <AnimateButton>
+          <Button
+            disableElevation
+            fullWidth
+            className={classes.redButton}
+            onClick={googleHandler}
+            size="large"
+            style={{ marginTop: "10px" }}
+            variant="contained"
+          >
+            <img
+              src="https://img.icons8.com/fluency/50/000000/facebook-new.png"
+              alt="facebook"
+              width="20px"
+              className={classes.loginIcon}
+            />
+            Sign in with Facebook
+          </Button>
+        </AnimateButton>
+      </Grid>
     </>
   );
 };

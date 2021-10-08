@@ -7,7 +7,7 @@ import { Link, Typography, Stack } from "@material-ui/core";
 
 const AuthFooter = () => (
   <Stack direction="row" justifyContent="space-between">
-    Education
+    Evanalin
   </Stack>
 );
 

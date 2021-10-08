@@ -122,7 +122,13 @@ const FirebaseRegister = ({ ...others }) => {
     changePassword("123456");
   }, []);
 
-  const initialState = { email: "", password: "", fName: "", lName: "" };
+  const initialState = {
+    email: "",
+    password: "",
+    fName: "",
+    lName: "",
+    institute: "",
+  };
   const [formData, setFormData] = useState(initialState);
   //   const navigate = useNavigate();
 
@@ -240,6 +246,25 @@ const FirebaseRegister = ({ ...others }) => {
             label="Teacher"
           />
         </RadioGroup>
+      </FormControl>
+
+      <FormControl fullWidth className={classes.loginInput}>
+        <InputLabel htmlFor="outlined-adornment-email-register">
+          Institute
+        </InputLabel>
+        <OutlinedInput
+          id="outlined-adornment-email-register"
+          name="institute"
+          inputProps={{
+            classes: {
+              notchedOutline: classes.notchedOutline,
+            },
+          }}
+          value={formData.institute}
+          onChange={(e) =>
+            setFormData({ ...formData, institute: e.target.value })
+          }
+        />
       </FormControl>
 
       <FormControl fullWidth className={classes.loginInput}>
@@ -386,6 +411,27 @@ const FirebaseRegister = ({ ...others }) => {
               className={classes.loginIcon}
             />{" "}
             Sign up with Google
+          </Button>
+        </AnimateButton>
+      </Grid>
+      <Grid item xs={12}>
+        <AnimateButton>
+          <Button
+            disableElevation
+            fullWidth
+            className={classes.redButton}
+            onClick={googleHandler}
+            size="large"
+            variant="contained"
+            style={{ marginTop: "10px" }}
+          >
+            <img
+              src="https://img.icons8.com/fluency/50/000000/facebook-new.png"
+              alt="facebook"
+              width="20px"
+              className={classes.loginIcon}
+            />
+            Sign up with Facebook
           </Button>
         </AnimateButton>
       </Grid>

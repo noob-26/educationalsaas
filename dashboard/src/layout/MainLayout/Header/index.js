@@ -52,7 +52,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           component="span"
           sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}
         >
-          Education
+          Evanalin
         </Box>
         <ButtonBase sx={{ borderRadius: "12px", overflow: "hidden" }}>
           <Avatar
