@@ -80,11 +80,11 @@ const MainRoutes = {
     },
     {
       path: "/dashboard/teacher/report",
-      element: <TeacherList />,
+      element: <TeacherReports />,
     },
     {
       path: "/dashboard/teacher/list",
-      element: <TeacherReports />,
+      element: <TeacherList />,
     },
     {
       path: "/dashboard/observer/report",
