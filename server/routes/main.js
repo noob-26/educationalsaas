@@ -7,6 +7,8 @@ const Class_Model = require("../models/Class");
 const ClassSubject_Model = require("../models/ClassSubject");
 const ClassLevel_Model = require("../models/ClassLevel");
 const Teacher_Model = require("../models/Teacher");
+const Observer_Model = require("../models/Observer");
+const Form_Model = require("../models/Form");
 
 router.get("/test", (req, res) => {
   res.send("Working");
@@ -196,6 +198,99 @@ router.delete("/deleteteacher/:id", async (req, res) => {
     await Teacher_Model.findByIdAndDelete(id);
     res.status(201).json({ message: "Deleted" });
   } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// ////////////////////
+// OBSERVSERS
+// ////////////////////
+
+router.post("/addobserver", async (req, res) => {
+  let formData = req.body;
+  try {
+    const newClass = new Observer_Model(formData);
+    await newClass.save();
+    res.status(201).json({ message: "New Observer Created" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.patch("/editobserver", async (req, res) => {
+  let formData = req.body;
+  try {
+    const newClass = await Observer_Model.findByIdAndUpdate(
+      { _id: formData._id },
+      formData,
+      { useFindAndModify: false }
+    );
+    res.status(201).json({ message: "Observer Updated" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.get("/getobserver", async (req, res) => {
+  try {
+    const allClasses = await Observer_Model.find({});
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.delete("/deleteobserver/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Observer_Model.findByIdAndDelete(id);
+    res.status(201).json({ message: "Deleted" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// //////////////////
+// FORMS
+// ///////////////////
+router.post("/saveform", async (req, res) => {
+  let fieldData = req.body;
+  try {
+    const newClass = new Form_Model(fieldData);
+    await newClass.save();
+    res.status(201).json({ message: "New Form Created" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.get("/getforms/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allClasses = await Form_Model.find({ observerId: id });
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+router.get("/getformpreview/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allClasses = await Form_Model.find({ _id: id });
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.delete("/deleteform/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Form_Model.findByIdAndDelete(id);
+    res.status(201).json({ message: "Deleted" });
+  } catch (error) {
+    console.log(error);
     res.status(404).json({ message: "Error" });
   }
 });

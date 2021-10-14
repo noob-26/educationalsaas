@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 
 // project imports
 import MinimalLayout from "layout/MinimalLayout";
+import ViewForm from "views/dashboard/Observers/ViewForm";
 
 // login option 3 routing
 const AuthLogin3 = Loadable(
@@ -26,6 +27,10 @@ const AuthenticationRoutes = {
     {
       path: "/pages/register/register3",
       element: <AuthRegister3 />,
+    },
+    {
+      path: "/viewform/:id",
+      element: <ViewForm />,
     },
   ],
 };

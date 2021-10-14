@@ -14,6 +14,7 @@ import TeacherReports from "views/dashboard/Teachers/Reports";
 import TeacherList from "views/dashboard/Teachers/List";
 import ObserverReport from "views/dashboard/Observers/Reports";
 import ObserverList from "views/dashboard/Observers/List";
+import Observer from "views/dashboard/Observers/Observer";
 import TrainingReport from "views/dashboard/Training/Reports";
 import TrainingList from "views/dashboard/Training/List";
 import { Navigate } from "react-router-dom";
@@ -93,6 +94,10 @@ const MainRoutes = {
     {
       path: "/dashboard/observer/list",
       element: <ObserverList />,
+    },
+    {
+      path: "/dashboard/observer/list/:id",
+      element: <Observer />,
     },
     {
       path: "/dashboard/training/report",

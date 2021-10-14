@@ -1,0 +1,25 @@
+.form-sample > form > div {
+  display: flex;
+  justify-content: space-between;
+  margin: 7px 0;
+}
+.error-message {
+  display: none;
+}
+.form-sample > form > div > input {
+  width: 50%;
+  height: 25px;
+}
+.form-sample > form > button {
+  margin: 5px auto;
+  text-transform: uppercase;
+  outline: none;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid grey;
+}
+.form-sample > form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
