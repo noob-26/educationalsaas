@@ -17,6 +17,7 @@ import ObserverList from "views/dashboard/Observers/List";
 import Observer from "views/dashboard/Observers/Observer";
 import TrainingReport from "views/dashboard/Training/Reports";
 import TrainingList from "views/dashboard/Training/List";
+import Trainer from "views/dashboard/Training/Trainer";
 import { Navigate } from "react-router-dom";
 
 // dashboard routing
@@ -106,6 +107,10 @@ const MainRoutes = {
     {
       path: "/dashboard/training/list",
       element: <TrainingList />,
+    },
+    {
+      path: "/dashboard/training/list/:id",
+      element: <Trainer />,
     },
     {
       path: "/utils/util-typography",

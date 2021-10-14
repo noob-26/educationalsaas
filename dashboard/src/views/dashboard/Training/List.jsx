@@ -22,19 +22,17 @@ import {
 const List = () => {
   const [classes, setClasses] = useState([]);
   const [open, setOpen] = useState(false);
-  const initialState = { name: "", description: "", batch: "" };
+  const initialState = {
+    name: "",
+    description: "",
+    objective: "",
+    startedAt: "",
+    trainingClass: "",
+    trainingCourse: "",
+  };
+
   const [formData, setFormData] = useState(initialState);
   const [years, setYears] = useState([]);
-
-  function generateYearsBetween(startYear = 2000, endYear) {
-    const endDate = endYear || new Date().getFullYear();
-    let year = [];
-    for (var i = startYear; i <= endDate; i++) {
-      year.push({ year: startYear });
-      startYear++;
-    }
-    setYears(year);
-  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -48,7 +46,7 @@ const List = () => {
 
   const editClass = async () => {
     await axios
-      .patch(`${API_SERVICE}/editclasslist`, formData)
+      .patch(`${API_SERVICE}/edittraininglist`, formData)
       .then((res) => {
         getClass();
         handleClose();
@@ -59,7 +57,7 @@ const List = () => {
 
   const addClass = async () => {
     await axios
-      .post(`${API_SERVICE}/addclasslist`, formData)
+      .post(`${API_SERVICE}/addtraininglist`, formData)
       .then((res) => {
         getClass();
         handleClose();
@@ -70,19 +68,18 @@ const List = () => {
 
   const getClass = async () => {
     await axios
-      .get(`${API_SERVICE}/getclasslist`)
+      .get(`${API_SERVICE}/gettraininglist`)
       .then((res) => setClasses(res.data))
       .catch((err) => console.log(err));
   };
   const deleteRow = async (id) => {
     await axios
-      .delete(`${API_SERVICE}/deleteclasslist/${id}`)
+      .delete(`${API_SERVICE}/deletetraininglist/${id}`)
       .then((res) => getClass())
       .catch((err) => console.log(err));
   };
   useEffect(() => {
     getClass();
-    generateYearsBetween();
   }, []);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -95,16 +92,16 @@ const List = () => {
           justifyContent: "space-between",
         }}
       >
-        Total Number of Classes : {classes?.length}
+        Total Number of Trainers : {classes?.length}
         <Button onClick={handleClickOpen} variant="contained">
-          ADD CLASS
+          ADD TRAINING
         </Button>
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
           <DialogTitle>{isEdit ? "Edit" : "Add"} Class</DialogTitle>
           <DialogContent>
             <TextField
               fullWidth
-              label="Name"
+              label="Training Name"
               value={formData?.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -113,7 +110,16 @@ const List = () => {
             />
             <TextField
               fullWidth
-              label="Description"
+              label="Training Objective"
+              value={formData?.objective}
+              onChange={(e) =>
+                setFormData({ ...formData, objective: e.target.value })
+              }
+              sx={{ mt: 3 }}
+            />
+            <TextField
+              fullWidth
+              label="Training Description"
               value={formData?.description}
               multiline
               rows={3}
@@ -122,25 +128,34 @@ const List = () => {
               }
               sx={{ mt: 3 }}
             />
-
-            <Autocomplete
+            <TextField
+              id="date"
+              label="Start Date"
+              type="date"
               fullWidth
-              disablePortal
-              options={years}
-              sx={{ mt: 3 }}
-              getOptionLabel={(option) => `${option.year}`}
-              renderInput={(params) => <TextField {...params} label="Year" />}
-              inputValue={formData.batch}
-              onInputChange={(event, newInputValue) => {
-                setFormData({ ...formData, batch: newInputValue });
+              InputLabelProps={{
+                shrink: true,
               }}
+              sx={{ mt: 3 }}
+              onChange={(e) =>
+                setFormData({ ...formData, startedAt: e.target.value })
+              }
             />
             <TextField
               fullWidth
-              label="Number Of Students"
-              value={formData?.numberOfStudents}
+              label="Training Class"
+              value={formData?.trainingClass}
               onChange={(e) =>
-                setFormData({ ...formData, numberOfStudents: e.target.value })
+                setFormData({ ...formData, trainingClass: e.target.value })
+              }
+              sx={{ mt: 3 }}
+            />
+            <TextField
+              fullWidth
+              label="Training Course"
+              value={formData?.trainingCourse}
+              onChange={(e) =>
+                setFormData({ ...formData, trainingCourse: e.target.value })
               }
               sx={{ mt: 3 }}
             />
@@ -163,9 +178,11 @@ const List = () => {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="right">Description</TableCell>
-                <TableCell align="right">Batch</TableCell>
-                <TableCell align="right">Number Of Students</TableCell>
-                <TableCell align="center">ACTIONS</TableCell>
+                <TableCell align="right">Objective</TableCell>
+                <TableCell align="right">Started At</TableCell>
+                <TableCell align="right">Training Class</TableCell>
+                <TableCell align="right">Training Course</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -178,9 +195,19 @@ const List = () => {
                     {row.name}
                   </TableCell>
                   <TableCell align="right">{row.description}</TableCell>
-                  <TableCell align="right">{row.batch}</TableCell>
-                  <TableCell align="right">{row.numberOfStudents}</TableCell>
+                  <TableCell align="right">{row.objective}</TableCell>
+                  <TableCell align="right">{row.startedAt}</TableCell>
+                  <TableCell align="right">{row.trainingClass}</TableCell>
+                  <TableCell align="right">{row.trainingCourse}</TableCell>
+
                   <TableCell align="center">
+                    <Button
+                      onClick={() =>
+                        (window.location.href = `/dashboard/training/list/${row._id}`)
+                      }
+                    >
+                      View
+                    </Button>
                     <Button
                       onClick={() => {
                         setIsEdit(true);

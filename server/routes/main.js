@@ -9,6 +9,8 @@ const ClassLevel_Model = require("../models/ClassLevel");
 const Teacher_Model = require("../models/Teacher");
 const Observer_Model = require("../models/Observer");
 const Form_Model = require("../models/Form");
+const Training_Model = require("../models/Training");
+const { findById } = require("../models/Class");
 
 router.get("/test", (req, res) => {
   res.send("Working");
@@ -291,6 +293,130 @@ router.delete("/deleteform/:id", async (req, res) => {
     res.status(201).json({ message: "Deleted" });
   } catch (error) {
     console.log(error);
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// ////////////////////////////
+// TRAINING
+// ///////////////////////////
+router.post("/addtraininglist", async (req, res) => {
+  let formData = req.body;
+  try {
+    const newClass = new Training_Model(formData);
+    await newClass.save();
+    res.status(201).json({ message: "New Class Created" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.patch("/edittraininglist", async (req, res) => {
+  let formData = req.body;
+  try {
+    const newClass = await Training_Model.findByIdAndUpdate(
+      { _id: formData._id },
+      formData,
+      { useFindAndModify: false }
+    );
+    res.status(201).json({ message: "New Level Created" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.get("/gettraininglist", async (req, res) => {
+  try {
+    const allClasses = await Training_Model.find({});
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+router.get("/gettraininglist/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allClasses = await Training_Model.find({ _id: id });
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.delete("/deletetraininglist/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Training_Model.findByIdAndDelete(id);
+    res.status(201).json({ message: "Deleted" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// ////////////////////////////
+// TRAINING Teacher
+// ///////////////////////////
+router.post("/addtrainingteacher/:id", async (req, res) => {
+  const { id } = req.params;
+  let formData = req.body;
+  try {
+    const newClass = await Training_Model.find({ _id: id });
+    newClass[0].teachers.push(formData);
+    const newTraining = await Training_Model.findByIdAndUpdate(
+      id,
+      newClass[0],
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+    console.log(newTraining);
+    res.status(201).json({ message: "New Teacher Added" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// router.patch("/edittrainingteacher", async (req, res) => {
+//   let formData = req.body;
+//   try {
+//     const newClass = await Training_Model.findByIdAndUpdate(
+//       { _id: formData._id },
+//       formData,
+//       { useFindAndModify: false }
+//     );
+//     res.status(201).json({ message: "New Level Created" });
+//   } catch (error) {
+//     res.status(404).json({ message: "Error" });
+//   }
+// });
+
+router.get("/gettrainingteacher", async (req, res) => {
+  try {
+    const allClasses = await Training_Model.find({});
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.post("/deletetrainingteacher/:id", async (req, res) => {
+  const { id } = req.params;
+  let formData = req.body;
+  try {
+    const newClass = await Training_Model.find({ _id: id });
+    newClass[0].teachers = newClass[0].teachers.filter((t) => t != formData);
+    const newTraining = await Training_Model.findByIdAndUpdate(
+      id,
+      newClass[0],
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+    res.status(201).json({ message: "Deleted" });
+  } catch (error) {
     res.status(404).json({ message: "Error" });
   }
 });
