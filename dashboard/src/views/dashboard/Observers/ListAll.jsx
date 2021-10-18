@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { API_SERVICE } from "../../../config";
-import axios from "axios";
+import React, { useState, useEffect, Suspense } from "react";
+import { useGeneratedForm } from "react-form-dynamic";
 import {
+  Button,
+  Container,
   TableContainer,
   Paper,
   Table,
@@ -9,161 +10,63 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Button,
-  Container,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
   Autocomplete,
+  MenuItem,
+  FormControl,
+  Select,
+  InputLabel,
 } from "@material-ui/core";
+import { API_SERVICE } from "../../../config";
+import axios from "axios";
+import { v4 as uuid } from "uuid";
 
 const ListAll = () => {
-  const [classes, setClasses] = useState([]);
-  const [open, setOpen] = useState(false);
-  const initialState = { name: "", description: "" };
-  const [formData, setFormData] = useState(initialState);
+  const [forms, setForms] = useState([]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setFormData(initialState);
-    setOpen(false);
-    setIsEdit(false);
-  };
-
-  const editClass = async () => {
+  const getForms = async () => {
     await axios
-      .patch(`${API_SERVICE}/editobserver`, formData)
+      .get(`${API_SERVICE}/getallforms`)
       .then((res) => {
-        getClass();
-        handleClose();
-        setFormData(initialState);
+        setForms(res.data);
       })
       .catch((err) => console.log(err));
   };
 
-  const addClass = async () => {
-    await axios
-      .post(`${API_SERVICE}/addobserver`, formData)
-      .then((res) => {
-        getClass();
-        handleClose();
-        setFormData(initialState);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getClass = async () => {
-    await axios
-      .get(`${API_SERVICE}/getobserver`)
-      .then((res) => setClasses(res.data))
-      .catch((err) => console.log(err));
-  };
-  const deleteRow = async (id) => {
-    await axios
-      .delete(`${API_SERVICE}/deleteobserver/${id}`)
-      .then((res) => getClass())
-      .catch((err) => console.log(err));
-  };
   useEffect(() => {
-    getClass();
+    getForms();
   }, []);
-  const [isEdit, setIsEdit] = useState(false);
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        Total Number of Observers : {classes?.length}
-        <Button onClick={handleClickOpen} variant="contained">
-          ADD OBSERVER
-        </Button>
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-          <DialogTitle>{isEdit ? "Edit" : "Add"} Class</DialogTitle>
-          <DialogContent>
-            <TextField
-              fullWidth
-              label="Name"
-              value={formData?.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              sx={{ mt: 3 }}
-            />
-            <TextField
-              fullWidth
-              label="Description"
-              value={formData?.description}
-              multiline
-              rows={3}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              sx={{ mt: 3 }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button
-              onClick={() => (isEdit ? editClass() : addClass())}
-              autoFocus
-            >
-              {isEdit ? "Edit" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
       <Container sx={{ mt: 5 }} maxWidth="lg">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Description</TableCell>
-                {/* <TableCell align="right">Batch</TableCell> */}
-
+                <TableCell align="right">No. Of Fields</TableCell>
                 <TableCell align="center">ACTIONS</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {classes?.map((row) => (
+              {forms?.map((row) => (
                 <TableRow
                   key={row._id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    onClick={() => {
-                      window.location.href = `/dashboard/observer/list/${row._id}`;
-                    }}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    {row.name}
+                  <TableCell component="th" scope="row">
+                    {row.title}
                   </TableCell>
-                  <TableCell align="right">{row.description}</TableCell>
-                  {/* <TableCell align="right">{row.batch}</TableCell> */}
-
+                  <TableCell align="right">{row?.fields?.length}</TableCell>
                   <TableCell align="center">
-                    <Button
-                      onClick={() => {
-                        setIsEdit(true);
-                        setFormData(row);
-                        handleClickOpen();
-                      }}
-                    >
-                      Edit
+                    <Button href={`/viewresponses/${row._id}`} target="_blank">
+                      View Observers
                     </Button>
-                    <Button onClick={() => deleteRow(row._id)}>Delete</Button>
                   </TableCell>
                 </TableRow>
               ))}

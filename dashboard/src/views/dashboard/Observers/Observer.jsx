@@ -238,22 +238,10 @@ const Observer = () => {
                   </TableCell>
                   <TableCell align="right">{row?.fields?.length}</TableCell>
                   <TableCell align="center">
-                    <Button
-                      // onClick={() =>
-                      //   (window.location.href = `/viewresponses/${row._id}`)
-                      // }
-                      href={`/viewresponses/${row._id}`}
-                      target="_blank"
-                    >
+                    <Button href={`/viewresponses/${row._id}`} target="_blank">
                       View Responses
                     </Button>
-                    <Button
-                      // onClick={() =>
-                      //   (window.location.href = `/viewform/${row._id}`)
-                      // }
-                      href={`/viewform/${row._id}`}
-                      target="_blank"
-                    >
+                    <Button href={`/viewform/${row._id}`} target="_blank">
                       Preview
                     </Button>
                     <Button onClick={() => deleteRow(row._id)}>Delete</Button>

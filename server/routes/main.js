@@ -277,6 +277,15 @@ router.get("/getforms/:id", async (req, res) => {
     res.status(404).json({ message: "Error" });
   }
 });
+router.get("/getallforms", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allClasses = await Form_Model.find();
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
 router.get("/getformpreview/:id", async (req, res) => {
   const { id } = req.params;
   try {
