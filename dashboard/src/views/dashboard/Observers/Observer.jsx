@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useGeneratedForm } from "react-form-dynamic";
 import {
   Button,
@@ -24,6 +24,9 @@ import {
 import { API_SERVICE } from "../../../config";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Form } from "antd";
+import FormBuilder from "antd-form-builder";
+import { v4 as uuid } from "uuid";
 
 const Observer = () => {
   const { id } = useParams();
@@ -37,51 +40,46 @@ const Observer = () => {
   };
 
   const [fields, setFields] = useState([]);
-  const initialState = { type: "", name: "", label: "" };
+  const initialState = { type: "", label: "" };
   const [formData, setFormData] = useState(initialState);
 
   const addField = () => {
     var newData = {
-      name: formData.name,
       label: formData.label,
-      type:
-        formData.type === "Textfield"
-          ? "text"
-          : formData.type === "Email"
-          ? "email"
-          : "password",
-      validations: [
-        {
-          rule: "required",
-          params: ["Required"],
-        },
-      ],
+      type: formData.type,
+      required: true,
+      value: "",
+      id: uuid(),
+      options: formData?.options?.split(",") || "",
+      optionType:
+        formData.type === "Select"
+          ? 2
+          : formData.type === "CheckBox"
+          ? 3
+          : formData.type === "Radio"
+          ? 4
+          : 1,
+      selected: formData.type === "CheckBox" && [],
     };
-
+    console.log(newData);
     setFields((prev) => [...prev, newData]);
-    // fields.push(newData);
     setFormData(initialState);
   };
 
   const [forms, setForms] = useState([]);
+  const [title, setTitle] = useState("");
 
   const saveForm = async () => {
     const fieldData = {
-      fields: [
-        ...fields,
-        {
-          name: "submit",
-          label: "Submit",
-          type: "element",
-          element: <button>submit</button>,
-        },
-      ],
+      fields,
       observerId: id,
+      title,
     };
     await axios
       .post(`${API_SERVICE}/saveform`, fieldData)
       .then((res) => {
         handleCloseForm();
+        getForms();
       })
       .catch((err) => console.log(err));
   };
@@ -130,7 +128,16 @@ const Observer = () => {
         >
           <DialogTitle>Add Form</DialogTitle>
           <DialogContent>
-            <FormControl fullWidth sx={{ mt: 3 }}>
+            <TextField
+              fullWidth
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              sx={{ mt: 2 }}
+            />
+            <hr />
+
+            <FormControl fullWidth sx={{ mt: 1 }}>
               <InputLabel id="demo-simple-select-label">Type</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -144,26 +151,57 @@ const Observer = () => {
                 <MenuItem value={"Textfield"}>Textfield</MenuItem>
                 <MenuItem value={"Email"}>Email</MenuItem>
                 <MenuItem value={"Password"}>Password</MenuItem>
+                <MenuItem value={"Select"}>Select</MenuItem>
+                <MenuItem value={"CheckBox"}>CheckBox</MenuItem>
+                <MenuItem value={"Radio"}>Radio</MenuItem>
               </Select>
             </FormControl>
+            {formData.type === "Select" && (
+              <TextField
+                fullWidth
+                label="Options"
+                value={formData?.options}
+                onChange={(e) =>
+                  setFormData({ ...formData, options: e.target.value })
+                }
+                placeholder="Type all the options seperated by commas(,)"
+                sx={{ mt: 2 }}
+              />
+            )}
+            {formData.type === "CheckBox" && (
+              <TextField
+                fullWidth
+                label="Options"
+                value={formData?.options}
+                onChange={(e) =>
+                  setFormData({ ...formData, options: e.target.value })
+                }
+                placeholder="Type all the options seperated by commas(,)"
+                sx={{ mt: 2 }}
+              />
+            )}
+            {formData.type === "Radio" && (
+              <TextField
+                fullWidth
+                label="Options"
+                value={formData?.options}
+                onChange={(e) =>
+                  setFormData({ ...formData, options: e.target.value })
+                }
+                placeholder="Type all the options seperated by commas(,)"
+                sx={{ mt: 2 }}
+              />
+            )}
             <TextField
               fullWidth
               label="Name"
-              value={formData?.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              sx={{ mt: 2 }}
-            />
-            <TextField
-              fullWidth
-              label="Label"
               value={formData?.label}
               onChange={(e) =>
                 setFormData({ ...formData, label: e.target.value })
               }
               sx={{ mt: 2 }}
             />
+
             <center>
               <Button onClick={addField} variant="contained" sx={{ mt: 3 }}>
                 ADD
@@ -196,14 +234,25 @@ const Observer = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row._id}
+                    {row.title}
                   </TableCell>
                   <TableCell align="right">{row?.fields?.length}</TableCell>
                   <TableCell align="center">
                     <Button
-                      onClick={() =>
-                        (window.location.href = `/viewform/${row._id}`)
-                      }
+                      // onClick={() =>
+                      //   (window.location.href = `/viewresponses/${row._id}`)
+                      // }
+                      href={`/viewresponses/${row._id}`}
+                      target="_blank"
+                    >
+                      View Responses
+                    </Button>
+                    <Button
+                      // onClick={() =>
+                      //   (window.location.href = `/viewform/${row._id}`)
+                      // }
+                      href={`/viewform/${row._id}`}
+                      target="_blank"
                     >
                       Preview
                     </Button>

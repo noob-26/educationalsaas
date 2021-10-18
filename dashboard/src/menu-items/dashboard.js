@@ -22,35 +22,35 @@ const dashboard = {
       icon: icons.IconDashboard,
       breadcrumbs: false,
     },
-    {
-      id: "observation",
-      title: "Observation",
-      type: "collapse",
-      icon: icons.IconKey,
-      children: [
-        {
-          id: "default21",
-          title: "Reports",
-          type: "item",
-          url: "/dashboard/observation/reports",
-          //   target: true,
-        },
-        {
-          id: "default22",
-          title: "Observation forms",
-          type: "item",
-          url: "/dashboard/observation/forms",
-          //   target: true,
-        },
-        {
-          id: "default23",
-          title: "Categories",
-          type: "item",
-          url: "/dashboard/observation/categories",
-          //   target: true,
-        },
-      ],
-    },
+    // {
+    //   id: "observation",
+    //   title: "Observation",
+    //   type: "collapse",
+    //   icon: icons.IconKey,
+    //   children: [
+    //     {
+    //       id: "default21",
+    //       title: "Reports",
+    //       type: "item",
+    //       url: "/dashboard/observation/reports",
+    //       //   target: true,
+    //     },
+    //     {
+    //       id: "default22",
+    //       title: "Observation forms",
+    //       type: "item",
+    //       url: "/dashboard/observation/forms",
+    //       //   target: true,
+    //     },
+    //     {
+    //       id: "default23",
+    //       title: "Categories",
+    //       type: "item",
+    //       url: "/dashboard/observation/categories",
+    //       //   target: true,
+    //     },
+    //   ],
+    // },
     {
       id: "classes",
       title: "Classes",
@@ -111,7 +111,7 @@ const dashboard = {
     },
     {
       id: "observer",
-      title: "Observers",
+      title: "Observers / Observations",
       type: "collapse",
       icon: icons.IconKey,
       children: [
@@ -124,9 +124,16 @@ const dashboard = {
         },
         {
           id: "default52",
-          title: "Observer list",
+          title: "Observation Form",
           type: "item",
           url: "/dashboard/observer/list",
+          //   target: true,
+        },
+        {
+          id: "default53",
+          title: "Observers",
+          type: "item",
+          url: "/dashboard/observer/all",
           //   target: true,
         },
       ],

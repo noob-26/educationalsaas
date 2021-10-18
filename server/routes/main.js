@@ -10,7 +10,8 @@ const Teacher_Model = require("../models/Teacher");
 const Observer_Model = require("../models/Observer");
 const Form_Model = require("../models/Form");
 const Training_Model = require("../models/Training");
-const { findById } = require("../models/Class");
+const FormResponse_Model = require("../models/FormResponses");
+// const { findById } = require("../models/Class");
 
 router.get("/test", (req, res) => {
   res.send("Working");
@@ -285,11 +286,35 @@ router.get("/getformpreview/:id", async (req, res) => {
     res.status(404).json({ message: "Error" });
   }
 });
+router.get("/getformresponses/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const allClasses = await FormResponse_Model.find({ formId: id });
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+router.post("/submitform", async (req, res) => {
+  const formData = req.body;
+  try {
+    const newResponse = new FormResponse_Model(formData);
+    await newResponse.save();
+    res.status(201).json(newResponse);
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+});
 
 router.delete("/deleteform/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await Form_Model.findByIdAndDelete(id);
+    const allForms = await FormResponse_Model.find({ formId: id });
+    allForms.map(
+      async (form) => await FormResponse_Model.findByIdAndDelete(form._id)
+    );
     res.status(201).json({ message: "Deleted" });
   } catch (error) {
     console.log(error);

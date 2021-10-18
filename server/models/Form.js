@@ -5,6 +5,10 @@ const formSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  title: {
+    type: String,
+    required: false,
+  },
   observerId: {
     type: String,
     required: false,
