@@ -10,6 +10,7 @@ import Level from "views/dashboard/Classes/Level";
 import List from "views/dashboard/Classes/List";
 import Subjects from "views/dashboard/Classes/Subjects";
 import ClassesReports from "views/dashboard/Classes/Reports";
+import ReportSubject from "views/dashboard/Classes/ReportSubject";
 import TeacherReports from "views/dashboard/Teachers/Reports";
 import TeacherList from "views/dashboard/Teachers/List";
 import ObserverReport from "views/dashboard/Observers/Reports";
@@ -76,6 +77,10 @@ const MainRoutes = {
     {
       path: "/dashboard/classes/reports",
       element: <ClassesReports />,
+    },
+    {
+      path: "/dashboard/classes/subject-report",
+      element: <ReportSubject />,
     },
     {
       path: "/dashboard/classes/subjects",

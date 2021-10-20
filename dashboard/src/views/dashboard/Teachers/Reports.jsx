@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Paper from "@material-ui/core/Paper";
 import {
@@ -10,6 +10,8 @@ import {
 } from "@devexpress/dx-react-chart-bootstrap4";
 import "@devexpress/dx-react-chart-bootstrap4/dist/dx-react-chart-bootstrap4.css";
 import { Animation } from "@devexpress/dx-react-chart";
+import { API_SERVICE } from "../../../config";
+import axios from "axios";
 
 const Reports = () => {
   const data = [
@@ -23,6 +25,21 @@ const Reports = () => {
   ];
 
   const [chartData, setChartData] = useState(data);
+
+  const [teachers, setTeachers] = useState([]);
+  const getTeachers = async () => {
+    await axios
+      .get(`${API_SERVICE}/getteacherlist`)
+      .then((res) => setTeachers(res.data))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getTeachers();
+  }, []);
+
+  console.log(teachers);
+
   return (
     <div>
       <Paper>

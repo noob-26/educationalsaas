@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API_SERVICE } from "../../../config";
+import axios from "axios";
 
 import Paper from "@material-ui/core/Paper";
 import {
@@ -23,15 +25,33 @@ const Reports = () => {
   ];
 
   const [chartData, setChartData] = useState(data);
+
+  const [forms, setForms] = useState([]);
+
+  const getForms = async () => {
+    await axios
+      .get(`${API_SERVICE}/getallforms`)
+      .then((res) => {
+        setForms(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  console.log(forms);
+
   return (
     <div>
       <Paper>
-        <Chart data={chartData}>
+        <Chart data={forms}>
           <ArgumentAxis />
           <ValueAxis max={7} />
 
-          <BarSeries valueField="population" argumentField="year" />
-          <Title text="Reports" />
+          <BarSeries valueField="noOfResponses" argumentField="title" />
+          <Title text="Responses" />
           <Animation />
         </Chart>
       </Paper>

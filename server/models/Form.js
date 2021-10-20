@@ -13,6 +13,11 @@ const formSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  noOfResponses: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

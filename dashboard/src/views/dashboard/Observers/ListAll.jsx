@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { useGeneratedForm } from "react-form-dynamic";
 import {
   Button,
@@ -10,16 +10,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Autocomplete,
-  MenuItem,
-  FormControl,
-  Select,
-  InputLabel,
 } from "@material-ui/core";
 import { API_SERVICE } from "../../../config";
 import axios from "axios";

@@ -65,6 +65,13 @@ const dashboard = {
           //   target: true,
         },
         {
+          id: "default36",
+          title: "Subject Reports",
+          type: "item",
+          url: "/dashboard/classes/subject-report",
+          //   target: true,
+        },
+        {
           id: "default32",
           title: "Class list",
           type: "item",

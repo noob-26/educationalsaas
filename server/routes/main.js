@@ -72,8 +72,18 @@ router.post("/addclasssubject", async (req, res) => {
   try {
     const newClass = new ClassSubject_Model(formData);
     await newClass.save();
+    const prevClass = await Class_Model.find({ name: formData.class });
+    prevClass[0].numberOfSubjects = prevClass[0].numberOfSubjects + 1;
+    await Class_Model.findByIdAndUpdate(
+      { _id: prevClass[0]._id },
+      prevClass[0],
+      {
+        useFindAndModify: false,
+      }
+    );
     res.status(201).json({ message: "New Class Created" });
   } catch (error) {
+    console.log(error);
     res.status(404).json({ message: "Error" });
   }
 });
@@ -103,6 +113,16 @@ router.get("/getclasssubject", async (req, res) => {
 router.delete("/deleteclasssubject/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    const prevSubject = await ClassSubject_Model.findById(id);
+    const prevClass = await Class_Model.find({ name: prevSubject.class });
+    prevClass[0].numberOfSubjects = prevClass[0].numberOfSubjects - 1;
+    await Class_Model.findByIdAndUpdate(
+      { _id: prevClass[0]._id },
+      prevClass[0],
+      {
+        useFindAndModify: false,
+      }
+    );
     await ClassSubject_Model.findByIdAndDelete(id);
     res.status(201).json({ message: "Deleted" });
   } catch (error) {
@@ -304,11 +324,25 @@ router.get("/getformresponses/:id", async (req, res) => {
     res.status(404).json({ message: "Error" });
   }
 });
+router.get("/getallresponses", async (req, res) => {
+  try {
+    const allClasses = await FormResponse_Model.find();
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
 
 router.post("/submitform", async (req, res) => {
   const formData = req.body;
+  console.log(formData);
   try {
     const newResponse = new FormResponse_Model(formData);
+    const form = await Form_Model.find({ _id: formData.formId });
+    form[0].noOfResponses = form[0].noOfResponses + 1;
+    await Form_Model.findByIdAndUpdate({ _id: form[0]._id }, form[0], {
+      useFindAndModify: false,
+    });
     await newResponse.save();
     res.status(201).json(newResponse);
   } catch (error) {

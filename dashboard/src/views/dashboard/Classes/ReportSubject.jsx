@@ -13,12 +13,15 @@ import { Animation } from "@devexpress/dx-react-chart";
 import { API_SERVICE } from "../../../config";
 import axios from "axios";
 
-const Reports = () => {
+const ReportSubject = () => {
   const [classes, setClasses] = useState([]);
   const getClass = async () => {
     await axios
       .get(`${API_SERVICE}/getclasslist`)
-      .then((res) => setClasses(res.data))
+      .then((res) => {
+        setClasses(res.data);
+        console.log(res.data);
+      })
       .catch((err) => console.log(err));
   };
   useEffect(() => {
@@ -32,8 +35,8 @@ const Reports = () => {
           <ArgumentAxis />
           <ValueAxis max={7} />
 
-          <BarSeries valueField="numberOfStudents" argumentField="name" />
-          <Title text="Number Of Students" />
+          <BarSeries valueField="numberOfSubjects" argumentField="name" />
+          <Title text="Number Of Subjects" />
           <Animation />
         </Chart>
       </Paper>
@@ -41,4 +44,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default ReportSubject;
