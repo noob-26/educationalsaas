@@ -2,7 +2,17 @@ import React, { useState, useEffect } from "react";
 import { API_SERVICE } from "../../../config";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, Card, Typography, Paper } from "@material-ui/core";
+import {
+  Container,
+  Table,
+  Typography,
+  Paper,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@material-ui/core";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 const ViewResponses = () => {
   const { id } = useParams();
@@ -37,6 +47,50 @@ const ViewResponses = () => {
           <h2>{title}</h2>
         </center>
         <hr style={{ marginBottom: "20px" }} />
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="tablexls"
+            sheet="tablexls"
+            buttonText="Download as XLS"
+          />
+        </div>
+
+        <Table
+          sx={{ minWidth: 650, display: "none" }}
+          aria-label="simple table"
+          id="table-to-xls"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Question</TableCell>
+              <TableCell>Response</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {responses?.map((row) => (
+              <>
+                <TableRow
+                  key={row._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+                {row?.data?.map((d) => (
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>{d.question}</TableCell>
+                    <TableCell>{d.response}</TableCell>
+                  </TableRow>
+                ))}
+              </>
+            ))}
+          </TableBody>
+        </Table>
         <h2>Responses</h2>
         {responses.map((resp) => (
           <Paper elevation={4} sx={{ p: 2, mt: 2 }}>

@@ -14,6 +14,7 @@ import {
 import { API_SERVICE } from "../../../config";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 const ListAll = () => {
   const [forms, setForms] = useState([]);
@@ -34,8 +35,22 @@ const ListAll = () => {
   return (
     <div>
       <Container sx={{ mt: 5 }} maxWidth="lg">
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="tablexls"
+            sheet="tablexls"
+            buttonText="Download as XLS"
+          />
+        </div>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table
+            sx={{ minWidth: 650 }}
+            aria-label="simple table"
+            id="table-to-xls"
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>

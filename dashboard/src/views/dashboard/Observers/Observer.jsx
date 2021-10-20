@@ -27,6 +27,7 @@ import { useParams } from "react-router-dom";
 import { Form } from "antd";
 import FormBuilder from "antd-form-builder";
 import { v4 as uuid } from "uuid";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 const Observer = () => {
   const { id } = useParams();
@@ -218,8 +219,22 @@ const Observer = () => {
         </Dialog>
       </div>
       <Container sx={{ mt: 5 }} maxWidth="lg">
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="tablexls"
+            sheet="tablexls"
+            buttonText="Download as XLS"
+          />
+        </div>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table
+            sx={{ minWidth: 650 }}
+            aria-label="simple table"
+            id="table-to-xls"
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
