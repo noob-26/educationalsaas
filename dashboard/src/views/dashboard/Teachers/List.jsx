@@ -36,6 +36,7 @@ const List = () => {
     Email: "",
     Phone: "",
     Address: "",
+    yearOfJoining: "",
   };
   const [formData, setFormData] = useState(initialState);
 
@@ -220,7 +221,11 @@ const List = () => {
               sx={{ mt: 3 }}
               value={formData.dateOfJoining}
               onChange={(e) =>
-                setFormData({ ...formData, dateOfJoining: e.target.value })
+                setFormData({
+                  ...formData,
+                  dateOfJoining: e.target.value,
+                  yearOfJoining: e.target.value.split("-")[0],
+                })
               }
             />
           </DialogContent>

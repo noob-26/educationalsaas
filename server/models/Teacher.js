@@ -29,6 +29,10 @@ const TeacherSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  yearOfJoining: {
+    type: String,
+    required: false,
+  },
   Class: {
     type: String,
     required: false,

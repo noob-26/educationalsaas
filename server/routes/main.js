@@ -7,6 +7,7 @@ const Class_Model = require("../models/Class");
 const ClassSubject_Model = require("../models/ClassSubject");
 const ClassLevel_Model = require("../models/ClassLevel");
 const Teacher_Model = require("../models/Teacher");
+const TeacherYear_Model = require("../models/TeacherYear");
 const Observer_Model = require("../models/Observer");
 const Form_Model = require("../models/Form");
 const Training_Model = require("../models/Training");
@@ -186,6 +187,22 @@ router.post("/addteacherlist", async (req, res) => {
   try {
     const newClass = new Teacher_Model(formData);
     await newClass.save();
+    const year = await TeacherYear_Model.find({
+      yearOfJoining: formData.yearOfJoining,
+    });
+
+    if (year.length === 0) {
+      const newYear = new TeacherYear_Model({
+        yearOfJoining: formData.yearOfJoining,
+      });
+      await newYear.save();
+    } else {
+      console.log(year[0].total);
+      await TeacherYear_Model.findByIdAndUpdate({ _id: year[0]._id }, year[0], {
+        useFindAndModify: false,
+      });
+    }
+
     res.status(201).json({ message: "New Level Created" });
   } catch (error) {
     res.status(404).json({ message: "Error" });
@@ -214,11 +231,31 @@ router.get("/getteacherlist", async (req, res) => {
     res.status(404).json({ message: "Error" });
   }
 });
+router.get("/getteacheryears", async (req, res) => {
+  try {
+    const allClasses = await TeacherYear_Model.find();
+    res.status(201).json(allClasses);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
 
 router.delete("/deleteteacher/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    const teacher = await Teacher_Model.findById(id);
+
     await Teacher_Model.findByIdAndDelete(id);
+
+    const year = await TeacherYear_Model.find({
+      yearOfJoining: teacher.yearOfJoining,
+    });
+
+    year[0].total = year[0].total - 1;
+    await TeacherYear_Model.findByIdAndUpdate({ _id: year[0]._id }, year[0], {
+      useFindAndModify: false,
+    });
+
     res.status(201).json({ message: "Deleted" });
   } catch (error) {
     res.status(404).json({ message: "Error" });

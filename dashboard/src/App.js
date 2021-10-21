@@ -2,7 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { ThemeProvider } from "@material-ui/core/styles";
-import { CssBaseline, StyledEngineProvider } from "@material-ui/core";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  createTheme,
+} from "@material-ui/core";
 
 // routing
 import Routes from "./routes";
@@ -18,10 +22,15 @@ import "./App.css";
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-
+  const theme = createTheme({
+    palette: {
+      type: "dark",
+    },
+  });
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>
+        {/* <ThemeProvider theme={theme}> */}
         <CssBaseline />
         <NavigationScroll>
           <Routes />

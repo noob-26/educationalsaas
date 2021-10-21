@@ -29,8 +29,10 @@ const Reports = () => {
   const [teachers, setTeachers] = useState([]);
   const getTeachers = async () => {
     await axios
-      .get(`${API_SERVICE}/getteacherlist`)
-      .then((res) => setTeachers(res.data))
+      .get(`${API_SERVICE}/getteacheryears`)
+      .then((res) => {
+        setTeachers(res.data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -43,11 +45,11 @@ const Reports = () => {
   return (
     <div>
       <Paper>
-        <Chart data={chartData}>
+        <Chart data={teachers}>
           <ArgumentAxis />
           <ValueAxis max={7} />
 
-          <BarSeries valueField="population" argumentField="year" />
+          <BarSeries valueField="total" argumentField="yearOfJoining" />
           <Title text="Reports" />
           <Animation />
         </Chart>
