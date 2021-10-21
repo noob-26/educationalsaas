@@ -21,6 +21,7 @@ import TrainingReport from "views/dashboard/Training/Reports";
 import TrainingList from "views/dashboard/Training/List";
 import Trainer from "views/dashboard/Training/Trainer";
 import { Navigate } from "react-router-dom";
+import ProfilePage from "views/dashboard/ProfilePage";
 
 // dashboard routing
 const DashboardDefault = Loadable(
@@ -50,6 +51,10 @@ const MainRoutes = {
   element: <MainLayout />,
   children: [
     { path: "/", element: <Navigate to="/pages/login/login3" replace /> },
+    {
+      path: "/profile",
+      element: <ProfilePage />,
+    },
     {
       path: "/dashboard/default",
       element: <DashboardDefault />,

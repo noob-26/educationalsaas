@@ -42,6 +42,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormLabel from "@mui/material/FormLabel";
 
+import axios from "axios";
+import { API_SERVICE } from "../../../../config";
+
 // style constant
 const useStyles = makeStyles((theme) => ({
   redButton: {
@@ -128,6 +131,7 @@ const FirebaseRegister = ({ ...others }) => {
     fName: "",
     lName: "",
     institute: "",
+    role: "",
   };
   const [formData, setFormData] = useState(initialState);
   //   const navigate = useNavigate();
@@ -143,11 +147,27 @@ const FirebaseRegister = ({ ...others }) => {
         sessionStorage.setItem("userName", name);
         sessionStorage.setItem("userEmail", user.email);
         sessionStorage.setItem("userId", user.uid);
-        user.updateProfile({
-          displayName: `${formData.fName} ${formData.lName}`,
-        });
+        user
+          .updateProfile({
+            displayName: `${formData.fName} ${formData.lName}`,
+          })
+          .then(async () => {
+            const userData = {
+              userId: user.uid,
+              userName: name,
+              userEmail: user.email,
+              userRole: formData.role,
+              userInstitute: formData.institute,
+            };
+            await axios
+              .post(`${API_SERVICE}/adduser`, userData)
+              .then((res) => {
+                window.location.href = "/dashboard/default";
+              })
+              .catch((err) => console.log(err));
+          });
+
         // navigate("/dashboard/default", { replace: true });
-        window.location.href = "/dashboard/default";
       })
       .catch(function (error) {
         var errorMessage = error.message;
@@ -229,7 +249,13 @@ const FirebaseRegister = ({ ...others }) => {
 
       <FormControl className={classes.radioInput} component="fieldset">
         <FormLabel component="legend">Select your role</FormLabel>
-        <RadioGroup row aria-label="role" name="row-radio-buttons-group">
+        <RadioGroup
+          row
+          aria-label="role"
+          name="row-radio-buttons-group"
+          value={formData.role}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+        >
           <FormControlLabel
             value="Student"
             control={<Radio />}

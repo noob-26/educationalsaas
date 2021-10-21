@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 import MinimalLayout from "layout/MinimalLayout";
 import ViewForm from "views/dashboard/Observers/ViewForm";
 import ViewResponses from "views/dashboard/Observers/ViewResponses";
+import ProfilePage from "views/dashboard/ProfilePage";
 
 // login option 3 routing
 const AuthLogin3 = Loadable(

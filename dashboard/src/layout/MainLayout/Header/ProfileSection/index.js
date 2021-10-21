@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import { useSelector } from "react-redux";
 
 // material-ui
@@ -32,8 +33,9 @@ import Transitions from "ui-component/extended/Transitions";
 import UpgradePlanCard from "./UpgradePlanCard";
 
 // assets
-import { IconLogout, IconSearch, IconSettings } from "@tabler/icons";
+import { IconLogout, UserIcon, IconSettings } from "@tabler/icons";
 import User1 from "assets/images/users/user-round.svg";
+import { auth } from "../../../../Firebase/index";
 
 // style const
 const useStyles = makeStyles((theme) => ({
@@ -127,7 +129,8 @@ const ProfileSection = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const handleLogout = async () => {
-    console.error("Logout");
+    sessionStorage.clear();
+    window.location.href = "/";
   };
 
   const handleToggle = () => {
@@ -150,7 +153,13 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
-  const userName = sessionStorage.getItem("userName");
+  const [user, setUser] = useState({});
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      setUser(user);
+    }
+  });
+
   return (
     <>
       <Chip
@@ -158,7 +167,7 @@ const ProfileSection = () => {
         className={classes.profileChip}
         icon={
           <Avatar
-            src={User1}
+            src={user?.photoURL}
             className={classes.headerAvatar}
             ref={anchorRef}
             aria-controls={open ? "menu-list-grow" : undefined}
@@ -218,12 +227,45 @@ const ProfileSection = () => {
                           variant="h4"
                           className={classes.name}
                         >
-                          {userName}
+                          {user?.displayName}
                         </Typography>
                       </Grid>
                     </Grid>
 
                     <List component="nav" className={classes.navContainer}>
+                      <ListItemButton
+                        className={classes.listItem}
+                        sx={{
+                          borderRadius: `${customization.borderRadius}px`,
+                        }}
+                        selected={selectedIndex === 4}
+                        onClick={() => (window.location.href = "/profile")}
+                      >
+                        <ListItemIcon>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-user"
+                            width="20.8"
+                            height="20.8"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ marginLeft: "-3px" }}
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <circle cx="12" cy="7" r="4" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                          </svg>
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography variant="body2">Profile</Typography>
+                          }
+                        />
+                      </ListItemButton>
                       <ListItemButton
                         className={classes.listItem}
                         sx={{

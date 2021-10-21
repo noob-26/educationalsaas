@@ -3,6 +3,7 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 // Getting Module
 
+const User_Model = require("../models/User");
 const Class_Model = require("../models/Class");
 const ClassSubject_Model = require("../models/ClassSubject");
 const ClassLevel_Model = require("../models/ClassLevel");
@@ -21,6 +22,46 @@ router.get("/test", (req, res) => {
 //
 //
 
+router.post("/adduser", async (req, res) => {
+  let userData = req.body;
+  try {
+    const newUser = new User_Model(userData);
+    await newUser.save();
+    console.log(newUser);
+    res.status(201).json({ message: "New Class Created" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+router.get("/getuser/:id", async (req, res) => {
+  let { id } = req.params;
+  try {
+    const newUser = await User_Model.find({ userId: id });
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Error" });
+  }
+});
+router.post("/updateuser/:id", async (req, res) => {
+  let { id } = req.params;
+  let formData = req.body;
+
+  try {
+    const newUser = await User_Model.find({ userId: id });
+    await User_Model.findByIdAndUpdate(newUser[0]._id, formData, {
+      useFindAndModify: false,
+    });
+    res.status(201).json({ message: "Updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// ////////////
+// CLASS
+// ////////////
 router.post("/addclasslist", async (req, res) => {
   let formData = req.body;
   try {
