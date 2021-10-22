@@ -20,7 +20,9 @@ import {
   TextField,
   Typography,
   useMediaQuery,
+  Snackbar,
 } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 
 // third party
 import * as Yup from "yup";
@@ -171,12 +173,47 @@ const FirebaseRegister = ({ ...others }) => {
       })
       .catch(function (error) {
         var errorMessage = error.message;
-        console.log(errorMessage);
+        setMessage(errorMessage);
+        handleClickSnack();
       });
+  };
+
+  const [message, setMessage] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
+  const handleClickSnack = () => {
+    setOpenSnack(true);
+  };
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnack(false);
   };
 
   return (
     <>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnack}
+        autoHideDuration={2000}
+        onClose={handleCloseSnack}
+        message={message}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnack}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid
           item

@@ -20,6 +20,7 @@ import {
   OutlinedInput,
   Stack,
   Typography,
+  Snackbar,
 } from "@material-ui/core";
 
 // third party
@@ -33,7 +34,7 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 // assets
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
+import CloseIcon from "@material-ui/icons/Close";
 import Google from "assets/images/icons/social-google.svg";
 // import { useNavigate } from "react-router";
 import { auth } from "../../../../Firebase/index";
@@ -120,12 +121,46 @@ const FirebaseLogin = (props, { ...others }) => {
         });
       })
       .catch(function (error) {
-        console.log(error.message);
+        handleClickSnack();
+        setMessage(error.message);
       });
+  };
+  const [message, setMessage] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
+  const handleClickSnack = () => {
+    setOpenSnack(true);
+  };
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnack(false);
   };
 
   return (
     <>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnack}
+        autoHideDuration={2000}
+        onClose={handleCloseSnack}
+        message={message}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnack}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid
           item
