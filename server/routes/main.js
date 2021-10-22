@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require("uuid");
 // Getting Module
 
+const Appt_Model = require("../models/Appointment");
 const User_Model = require("../models/User");
 const Class_Model = require("../models/Class");
 const ClassSubject_Model = require("../models/ClassSubject");
@@ -14,14 +16,61 @@ const Form_Model = require("../models/Form");
 const Training_Model = require("../models/Training");
 const FormResponse_Model = require("../models/FormResponses");
 // const { findById } = require("../models/Class");
+const emailId = require("../config/keys").Email;
+const emailPassword = require("../config/keys").Password;
 
 router.get("/test", (req, res) => {
   res.send("Working");
 });
 
-//
-//
+///////////////////////
+// APPOINTMENT
+///////////////////////
 
+router.post("/saveappt", async (req, res) => {
+  let appData = req.body;
+  try {
+    const newUser = new Appt_Model(appData);
+    const observer = await Observer_Model.findById(appData.observerId);
+    await newUser.save();
+
+    try {
+      (transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: emailId,
+          pass: emailPassword,
+        },
+      })),
+        (mailOption = {
+          from: emailId,
+          to: appData?.teacherData[0]?.Email,
+          subject: "Appointment Booked",
+          html: `Appointment booked by ${observer.name} for ${appData.apptDate}<br />${appData.note}`,
+        }),
+        transporter.sendMail(mailOption, (err, data) => {
+          console.log("Email Sent!");
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(201).json({ message: "New Appointment Created" });
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+router.get("/getappt", async (req, res) => {
+  try {
+    const data = await Appt_Model.find();
+    res.status(201).json(data);
+  } catch (error) {
+    res.status(404).json({ message: "Error" });
+  }
+});
+
+// /////////////////////
+// USERS
+// /////////////////////
 router.post("/adduser", async (req, res) => {
   let userData = req.body;
   try {

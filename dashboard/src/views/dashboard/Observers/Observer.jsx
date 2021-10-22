@@ -39,6 +39,15 @@ const Observer = () => {
   const handleCloseForm = () => {
     setOpenForm(false);
   };
+  const [openApp, setOpenApp] = useState(false);
+  const handleClickApp = () => {
+    getTeachers();
+    setOpenApp(true);
+  };
+
+  const handleCloseApp = () => {
+    setOpenApp(false);
+  };
 
   const [fields, setFields] = useState([]);
   const initialState = { type: "", label: "" };
@@ -105,6 +114,32 @@ const Observer = () => {
     getForms();
   }, []);
 
+  const initialAppt = {
+    apptDate: "",
+    teacher: "",
+    note: "",
+    observerId: id,
+    teacherData: {},
+  };
+  const [appData, setAppData] = useState(initialAppt);
+
+  const [teachers, setTeachers] = useState([]);
+  const getTeachers = async () => {
+    await axios
+      .get(`${API_SERVICE}/getteacherlist`)
+      .then((res) => setTeachers(res.data))
+      .catch((err) => console.log(err));
+  };
+  const saveApp = async () => {
+    await axios
+      .post(`${API_SERVICE}/saveappt`, appData)
+      .then((res) => {
+        handleCloseApp();
+        setAppData(initialAppt);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <div
@@ -115,12 +150,82 @@ const Observer = () => {
         }}
       >
         <Button
+          variant="contained"
           onClick={() => {
             handleClickOpenForm();
           }}
         >
           Add Forms
         </Button>
+        <Button
+          variant="outlined"
+          style={{ marginLeft: "10px" }}
+          onClick={() => {
+            handleClickApp();
+          }}
+        >
+          Add Appointment
+        </Button>
+        <Dialog open={openApp} onClose={handleCloseApp} fullWidth maxWidth="sm">
+          <DialogTitle>Add Appointment</DialogTitle>
+          <DialogContent>
+            <TextField
+              id="datetime-local"
+              label="Appointment Date"
+              type="datetime-local"
+              defaultValue="2021-10-24T10:30"
+              value={appData.apptDate}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{ mt: 2 }}
+              onChange={(e) => {
+                setAppData({ ...appData, apptDate: e.target.value });
+              }}
+            />
+
+            <Autocomplete
+              inputValue={appData.teacher}
+              // onInputChange={(event, newInputValue) => {
+              //   setAppData({ ...appData, teacher: newInputValue });
+              // }}
+              onChange={(event, newInputValue) => {
+                setAppData({
+                  ...appData,
+                  teacher: `${newInputValue.fName} ${newInputValue.lName}`,
+                  teacherData: newInputValue,
+                });
+              }}
+              id="controllable-states-demo"
+              options={teachers}
+              fullWidth
+              getOptionLabel={(option) => `${option.fName} ${option.lName}`}
+              renderInput={(params) => (
+                <TextField {...params} label="Teacher" />
+              )}
+              sx={{ mt: 2 }}
+            />
+
+            <TextField
+              fullWidth
+              label="Note"
+              multiline
+              rows={3}
+              value={appData.note}
+              onChange={(e) => {
+                setAppData({ ...appData, note: e.target.value });
+              }}
+              sx={{ mt: 2 }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseApp}>Cancel</Button>
+            <Button onClick={saveApp} autoFocus>
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Dialog
           open={openForm}
           onClose={handleCloseForm}

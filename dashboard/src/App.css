@@ -38,3 +38,7 @@
   padding: 10px;
   cursor: pointer;
 }
+
+.fc-media-screen {
+  max-height: 500px;
+}

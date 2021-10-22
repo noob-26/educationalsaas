@@ -143,6 +143,13 @@ const dashboard = {
           url: "/dashboard/observer/all",
           //   target: true,
         },
+        {
+          id: "default54",
+          title: "Appointments",
+          type: "item",
+          url: "/dashboard/observer/appointments",
+          //   target: true,
+        },
       ],
     },
     {

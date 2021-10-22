@@ -16,6 +16,7 @@ import TeacherList from "views/dashboard/Teachers/List";
 import ObserverReport from "views/dashboard/Observers/Reports";
 import ObserverList from "views/dashboard/Observers/List";
 import ObserverListAll from "views/dashboard/Observers/ListAll";
+import ObserverAppointments from "views/dashboard/Observers/ObserverAppointments";
 import Observer from "views/dashboard/Observers/Observer";
 import TrainingReport from "views/dashboard/Training/Reports";
 import TrainingList from "views/dashboard/Training/List";
@@ -110,6 +111,10 @@ const MainRoutes = {
     {
       path: "/dashboard/observer/all",
       element: <ObserverListAll />,
+    },
+    {
+      path: "/dashboard/observer/appointments",
+      element: <ObserverAppointments />,
     },
     {
       path: "/dashboard/observer/list/:id",
