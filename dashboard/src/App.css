@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: local("Montserrat-Regular"),
+    url(./assets/fonts/Montserrat/Montserrat-Regular.ttf) format("woff");
+}
+
+body {
+  font-family: 'Montserrat-Regular';
+}
 .form-sample > form > div {
   display: flex;
   justify-content: space-between;
