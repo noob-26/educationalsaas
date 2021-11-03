@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 // material-ui
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles, useTheme } from '@material-ui/styles'
 import {
   Avatar,
   Box,
@@ -12,39 +12,46 @@ import {
   InputAdornment,
   OutlinedInput,
   Popper,
-} from "@material-ui/core";
+} from '@material-ui/core'
 
 // third-party
-import PopupState, { bindPopper, bindToggle } from "material-ui-popup-state";
+import PopupState, { bindPopper, bindToggle } from 'material-ui-popup-state'
 
 // project imports
-import Transitions from "ui-component/extended/Transitions";
+import Transitions from 'ui-component/extended/Transitions'
 
 // assets
-import { IconAdjustmentsHorizontal, IconSearch, IconX } from "@tabler/icons";
+import { IconAdjustmentsHorizontal, IconSearch, IconX } from '@tabler/icons'
 
 // style constant
 const useStyles = makeStyles((theme) => ({
   searchControl: {
-    width: "434px",
-    marginLeft: "16px",
-    paddingRight: "16px",
-    paddingLeft: "16px",
-    "& input": {
-      background: "transparent !important",
-      paddingLeft: "5px !important",
+    width: '434px',
+    background: `${
+      theme.palette.mode === 'light' ? 'transparent !important' : '#111936'
+    }`,
+    marginLeft: '16px',
+    paddingRight: '16px',
+    paddingLeft: '16px',
+    '& input': {
+      background: `${
+        theme.palette.mode === 'light' ? 'transparent !important' : '#111936'
+      }`,
+      paddingLeft: '5px !important',
     },
-    [theme.breakpoints.down("lg")]: {
-      width: "250px",
+    [theme.breakpoints.down('lg')]: {
+      width: '250px',
     },
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-      marginLeft: "4px",
-      background: "#fff",
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      marginLeft: '4px',
+      background: `${
+        theme.palette.mode === 'light' ? 'transparent !important' : '#111936'
+      }`,
     },
   },
   startAdornment: {
-    fontSize: "1rem",
+    fontSize: '1rem',
     color: theme.palette.grey[500],
   },
   headerAvatar: {
@@ -52,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.mediumAvatar,
     background: theme.palette.secondary.light,
     color: theme.palette.secondary.dark,
-    "&:hover": {
+    '&:hover': {
       background: theme.palette.secondary.dark,
       color: theme.palette.secondary.light,
     },
@@ -62,42 +69,45 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.mediumAvatar,
     background: theme.palette.orange.light,
     color: theme.palette.orange.dark,
-    "&:hover": {
+    '&:hover': {
       background: theme.palette.orange.dark,
       color: theme.palette.orange.light,
     },
   },
   popperContainer: {
     zIndex: 1100,
-    width: "99%",
-    top: "-55px !important",
-    padding: "0 12px",
-    [theme.breakpoints.down("sm")]: {
-      padding: "0 10px",
+    width: '99%',
+    top: '-55px !important',
+    padding: '0 12px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '0 10px',
     },
   },
   cardContent: {
-    padding: "12px !important",
+    padding: '12px !important',
   },
   card: {
-    background: "#fff",
-    [theme.breakpoints.down("sm")]: {
+    background: `${
+      theme.palette.mode === 'light' ? '#fff !important' : '#111936'
+    }`,
+    [theme.breakpoints.down('sm')]: {
       border: 0,
-      boxShadow: "none",
+      boxShadow: 'none',
     },
   },
-}));
+}))
 
 // ===========================|| SEARCH INPUT ||=========================== //
 
 const SearchSection = () => {
-  const classes = useStyles();
-  const [value, setValue] = useState("");
+  const classes = useStyles()
+  const [value, setValue] = useState('')
+  const theme = useTheme()
 
   return (
     <>
-      <Box sx={{ display: { xs: "block", md: "none" } }}>
-        <PopupState variant="popper" popupId="demo-popup-popper">
+      <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+        <PopupState variant='popper' popupId='demo-popup-popper'>
           {(popupState) => (
             <>
               <Box
@@ -105,13 +115,13 @@ const SearchSection = () => {
                   ml: 2,
                 }}
               >
-                <ButtonBase sx={{ borderRadius: "12px" }}>
+                <ButtonBase sx={{ borderRadius: '12px' }}>
                   <Avatar
-                    variant="rounded"
+                    variant='rounded'
                     className={classes.headerAvatar}
                     {...bindToggle(popupState)}
                   >
-                    <IconSearch stroke={1.5} size="1.2rem" />
+                    <IconSearch stroke={1.5} size='1.2rem' />
                   </Avatar>
                 </ButtonBase>
               </Box>
@@ -122,43 +132,43 @@ const SearchSection = () => {
               >
                 {({ TransitionProps }) => (
                   <Transitions
-                    type="zoom"
+                    type='zoom'
                     {...TransitionProps}
-                    sx={{ transformOrigin: "center left" }}
+                    sx={{ transformOrigin: 'center left' }}
                   >
                     <Card className={classes.card}>
                       <CardContent className={classes.cardContent}>
                         <Grid
                           container
-                          alignItems="center"
-                          justifyContent="space-between"
+                          alignItems='center'
+                          justifyContent='space-between'
                         >
                           <Grid item xs>
                             <OutlinedInput
                               className={classes.searchControl}
-                              id="input-search-header"
+                              id='input-search-header'
                               value={value}
                               onChange={(e) => setValue(e.target.value)}
-                              placeholder="Search"
+                              placeholder='Search'
                               startAdornment={
-                                <InputAdornment position="start">
+                                <InputAdornment position='start'>
                                   <IconSearch
                                     stroke={1.5}
-                                    size="1rem"
+                                    size='1rem'
                                     className={classes.startAdornment}
                                   />
                                 </InputAdornment>
                               }
                               endAdornment={
-                                <InputAdornment position="end">
-                                  <ButtonBase sx={{ borderRadius: "12px" }}>
+                                <InputAdornment position='end'>
+                                  <ButtonBase sx={{ borderRadius: '12px' }}>
                                     <Avatar
-                                      variant="rounded"
+                                      variant='rounded'
                                       className={classes.headerAvatar}
                                     >
                                       <IconAdjustmentsHorizontal
                                         stroke={1.5}
-                                        size="1.3rem"
+                                        size='1.3rem'
                                       />
                                     </Avatar>
                                   </ButtonBase>
@@ -167,21 +177,21 @@ const SearchSection = () => {
                                       ml: 2,
                                     }}
                                   >
-                                    <ButtonBase sx={{ borderRadius: "12px" }}>
+                                    <ButtonBase sx={{ borderRadius: '12px' }}>
                                       <Avatar
-                                        variant="rounded"
+                                        variant='rounded'
                                         className={classes.closeAvatar}
                                         {...bindToggle(popupState)}
                                       >
-                                        <IconX stroke={1.5} size="1.3rem" />
+                                        <IconX stroke={1.5} size='1.3rem' />
                                       </Avatar>
                                     </ButtonBase>
                                   </Box>
                                 </InputAdornment>
                               }
-                              aria-describedby="search-helper-text"
+                              aria-describedby='search-helper-text'
                               inputProps={{
-                                "aria-label": "weight",
+                                'aria-label': 'weight',
                               }}
                             />
                           </Grid>
@@ -195,30 +205,30 @@ const SearchSection = () => {
           )}
         </PopupState>
       </Box>
-      <Box sx={{ display: { xs: "none", md: "block" } }}>
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
         <OutlinedInput
           className={classes.searchControl}
-          id="input-search-header"
+          id='input-search-header'
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Search"
+          placeholder='Search'
           startAdornment={
-            <InputAdornment position="start">
+            <InputAdornment position='start'>
               <IconSearch
                 stroke={1.5}
-                size="1rem"
+                size='1rem'
                 className={classes.startAdornment}
               />
             </InputAdornment>
           }
-          aria-describedby="search-helper-text"
+          aria-describedby='search-helper-text'
           inputProps={{
-            "aria-label": "weight",
+            'aria-label': 'weight',
           }}
         />
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default SearchSection;
+export default SearchSection
