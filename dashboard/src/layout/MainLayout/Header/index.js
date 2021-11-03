@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 
 // redux import
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { SET_THEME_MODE } from 'store/actions'
 
 // material-ui
@@ -51,13 +51,26 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
 
-  const [mode, setMode] = useState(theme.palette.mode)
+  const colorMode = localStorage.getItem('colorMode')
+    ? JSON.parse(localStorage.getItem('colorMode'))
+    : theme.palette.mode
+
+  const [mode, setMode] = useState(colorMode)
   const toggleColorMode = () => {
     setMode(mode === 'light' ? 'dark' : 'light')
   }
 
   useEffect(() => {
-    dispatch({ type: SET_THEME_MODE, mode })
+    const changeTheme = async () => {
+      try {
+        dispatch({ type: SET_THEME_MODE, mode })
+        localStorage.setItem('colorMode', JSON.stringify(mode))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    changeTheme()
   }, [dispatch, mode])
 
   return (

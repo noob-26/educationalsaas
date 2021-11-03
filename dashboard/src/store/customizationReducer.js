@@ -9,6 +9,9 @@ export const initialState = {
   fontFamily: config.fontFamily,
   borderRadius: config.borderRadius,
   opened: true,
+  navType: localStorage.getItem('colorMode')
+    ? JSON.parse(localStorage.getItem('colorMode'))
+    : 'light',
 }
 
 // ===========================|| CUSTOMIZATION REDUCER ||=========================== //
